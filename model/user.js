@@ -1,19 +1,15 @@
-const pool = require('../config/database');
+const sequelize = require('../config/sequelize');
+const {Sequelize} = require('sequelize');
 
-const Customer = function(customer) {
-  this.email = customer.email;
-  this.name = customer.name; 
-};
+const { Model, DataTypes, Deferrable } = require("sequelize");
 
-module.exports= Customer.create =  (newCustomer,result) => {
-  // pool.query("INSERT INTO customers SET ?", newCustomer, (err, res) => {
-  //   if (err) {
-  //     console.log("error: ", err);
-  //     result(err, null);
-  //     return;
-  //   }
-  //   result(null,res);    
-  // });
- pool.query("INSERT INTO customers SET ?", newCustomer);
-  
-};
+class User extends Model{}
+
+User.init({
+  id: { type: DataTypes.UUID, defaultValue: Sequelize.UUIDV4, primaryKey: true },
+  name: { type: DataTypes.STRING, allowNull: false },
+},
+{
+  sequelize,
+  modelName: 'users',
+});

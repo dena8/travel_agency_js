@@ -4,10 +4,12 @@ const express = require('express');
 const app = express()
 const port = process.env.PORT;
 
+const db = require('./config/sequelize');
+db.sync();
 
 require('./config/express')(app);
-require('./config/database');
 require('./config/routes')(app);
+
 
 
 app.get("/", (req, res) => {
