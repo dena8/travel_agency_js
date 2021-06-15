@@ -1,3 +1,4 @@
+require("dotenv").config();
 const sequelize = require("../config/sequelize");
 const { Model, DataTypes, Sequelize } = require("sequelize");
 const bcrypt = require("bcrypt");
@@ -21,14 +22,13 @@ User.init(
   }
 );
 
-User.beforeCreate((user, options) => {
-  bcrypt.hash(user.password, 5, function (err, hash) {
-    if (err) {
-      console.log(err);
-    }
-    user.password = hash;
-    console.log("user.password", user.password);
-  });
+User.beforeCreate(async (user, options) => {
+  const hashPassword = await bcrypt.hash(user.password,Number(process.env.SALT_ROUNDS));  
+  user.password = hashPassword;
 });
+
+User.comparePassword = function(password,user){
+  return bcrypt.compare(password, user.password);
+}
 
 module.exports = User;
