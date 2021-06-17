@@ -2,6 +2,9 @@ require("dotenv").config();
 const sequelize = require("../config/sequelize");
 const { Model, DataTypes, Sequelize } = require("sequelize");
 const bcrypt = require("bcrypt");
+const Tour = require('./tour');
+const Authority = require("./authority");
+
 
 class User extends Model {}
 
@@ -31,4 +34,12 @@ User.comparePassword = function(password,user){
   return bcrypt.compare(password, user.password);
 }
 
+Tour.belongsTo(User,{
+  foreignKey: 'creatorId',
+  as: 'creator' 
+});
+
+
+
+ 
 module.exports = User;

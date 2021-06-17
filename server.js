@@ -3,7 +3,6 @@ require('dotenv').config()
 const express = require('express');
 const app = express()
 const port = process.env.PORT;
-const Authority = require('./model/authority')
  const cors = require('cors')
 
 const db = require('./config/sequelize');
@@ -12,6 +11,7 @@ db.sync();
 
 require('./config/express')(app);
 require('./config/routes')(app);
+require('./config/cloudinary');
 
 
 

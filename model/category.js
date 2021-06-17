@@ -1,6 +1,6 @@
 const sequelize = require("../config/sequelize");
 const { Model, DataTypes, Sequelize } = require("sequelize");
-const Tour = require("./tour");
+const Tour = require('./tour');
 
 class Category extends Model {}
 
@@ -19,7 +19,5 @@ Category.init(
   }
 );
 
-//Authority.hasMany(User, { type: DataTypes.UUID, allowNull: false });
-Category.hasMany(Tour,{ type: DataTypes.UUID, allowNull: false })
 
 module.exports=Category;

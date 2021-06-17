@@ -19,6 +19,11 @@ Authority.init(
   }
 );
 
-Authority.hasMany(User, { type: DataTypes.UUID, allowNull: false });
+
+User.belongsTo(Authority,{
+  foreignKey:'authorityId',
+  as:'authority'
+})
+
 
 module.exports = Authority;

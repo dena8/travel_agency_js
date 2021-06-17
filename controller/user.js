@@ -9,11 +9,12 @@ module.exports = {
     async register(req, res, next) {
       const { username,password, email } = req.body;   
       if(await User.count()==1){
+        const guideAuthority = await Authority.findOne({ where: { Authority: "GUIDE_ROLE" } })
         await User.create({
           username,
           password,
           email,
-          AuthorityId: '2bd59486-2317-4e1d-9a8f-3a569075ared' 
+          authorityId: guideAuthority.id
         });
         res.send({ massage: "created" });
         return;
@@ -30,7 +31,7 @@ module.exports = {
             username,
             password,
             email,
-            AuthorityId: authority.id,
+            authorityId: authority.id,
           });
    
       res.send({ massage: "created" });
@@ -47,7 +48,7 @@ module.exports = {
         res.status(404).send({ message: "Wrong username or password" });
       }
       const userAuthority = await Authority.findOne({
-        where: { id: user.AuthorityId },
+        where: { id: user.authorityId },
       });
       const authority = userAuthority.authority;
       const token = await jwt.sign(
