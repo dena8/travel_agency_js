@@ -38,8 +38,5 @@ Tour.belongsTo(User,{
   foreignKey: 'creatorId',
   as: 'creator' 
 });
-
-
-
  
 module.exports = User;

@@ -16,6 +16,7 @@ Tour.init(
     image: { type: DataTypes.STRING, allowNull: false },
     price: { type: DataTypes.DECIMAL, allowNull: false },
     enabled: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue:true},
+    startDate:{type:DataTypes.DATE, allowNull:false}
   },
   {
     sequelize,
