@@ -1,7 +1,8 @@
 const { User, Authority } = require("../model/index");
 const jwt = require("jsonwebtoken");
 const currentUser = require("../util/currentUser");
-
+const credentialsError = require("../error/invalid_user_or_password");
+const applicationError = require("../error/custom_error");
 
 module.exports = {
   get: {
@@ -27,6 +28,12 @@ module.exports = {
   post: {
     async register(req, res, next) {
       const { username, password, email } = req.body;
+      
+      const findByUsername = await User.findOne({where:{username}});
+      if(findByUsername!=null){
+        throw new applicationError("Username is already in use",500);
+      }  
+
       if ((await User.count()) == 1) {
         const guideAuthority = await Authority.findOne({
           where: { Authority: "GUIDE_ROLE" },
@@ -58,14 +65,15 @@ module.exports = {
     async login(req, res, next) {
       const { username, password } = req.body;
       const user = await User.findOne({ where: { username } });
-
-      if (!(await User.comparePassword(password, user))) {
-        res.send(new Error("not work"));
-      }
-
+    
       if (user == null) {
-        res.status(404).send({ message: "Wrong username or password" });
+        throw new credentialsError("Invalid credentials", 500);
       }
+      const comparePass = await User.comparePassword(password, user);
+      if (!comparePass) {
+        throw new credentialsError("Invalid credentials", 500);
+      }
+
       const userAuthority = await Authority.findOne({
         where: { id: user.authorityId },
       });
@@ -83,12 +91,12 @@ module.exports = {
   },
   update: {
     async updateAuthority(req, res) {
-      const { authority, username } = req.body;   
-        
-      const userAuthority = await Authority.findOne({where:{authority}});  
+      const { authority, username } = req.body;
+
+      const userAuthority = await Authority.findOne({ where: { authority } });
 
       const user = await User.update(
-        { authorityId:userAuthority.id},
+        { authorityId: userAuthority.id },
         {
           where: { username },
         }

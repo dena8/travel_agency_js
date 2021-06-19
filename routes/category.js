@@ -1,9 +1,10 @@
 const router = require('express').Router();
 const categoryController = require('../controller/category');
+const asyncHandler = require('express-async-handler');
 
-router.get('/all', categoryController.get.allCategories);
+router.get('/all',asyncHandler(categoryController.get.allCategories));
 
-router.post('/create',categoryController.post.createCategory);
+router.post('/create',asyncHandler(categoryController.post.createCategory));
 
 
 module.exports = router;

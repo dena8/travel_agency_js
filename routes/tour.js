@@ -1,16 +1,17 @@
 const router = require('express').Router();
 const tourController = require('../controller/tour');
 const {isAdmin}=require('../middleware/auth');
-var multipart = require('connect-multiparty');
-var multipartMiddleware = multipart();
+const multipart = require('connect-multiparty');
+const multipartMiddleware = multipart();
+const asyncHandler = require('express-async-handler');
 
 
-router.get('/all',tourController.get.all);
-router.get('/:id',tourController.get.tourById);
+router.get('/all',asyncHandler(tourController.get.all));
+router.get('/:id',asyncHandler(tourController.get.tourById));
 
-router.post('/create',multipartMiddleware,tourController.post.createTour);
+router.post('/create',multipartMiddleware,asyncHandler(tourController.post.createTour));
 
-router.delete('/remove/:id', tourController.delete.tourById);
+router.delete('/remove/:id',asyncHandler(tourController.delete.tourById));
 
 
 module.exports=router;

@@ -7,11 +7,13 @@ module.exports = {
     async all(req, res) {
       const tours = await Tour.findAll({
         include: [{ model: Category, as: "category" }],
-      });
+      });      
+      throw new Error('MY ERROR')
       res.send(tours);
     },
     async tourById(req, res) {
       const id = req.params.id;
+      console.log("id: ",id);
       const tour = await Tour.findOne({
         where: { id },
         include: [{ model: Category, as: "category" }],

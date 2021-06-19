@@ -31,6 +31,7 @@ User.beforeCreate(async (user, options) => {
 });
 
 User.comparePassword = function(password,user){
+//  console.log("user from compare method",user);
   return bcrypt.compare(password, user.password);
 }
 

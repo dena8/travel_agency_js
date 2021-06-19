@@ -1,6 +1,6 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
-const {User}= require('../model/index')
+const { User } = require("../model/index");
 
 module.exports = async (req) => {
   const tokenHeader = req.header("Authorization");
@@ -8,9 +8,9 @@ module.exports = async (req) => {
 
   const decodeToken = await jwt.verify(token, process.env.TOKEN_SECRET);
 
- const user =await User.findOne({where:{username:decodeToken.username}});
+  const user = await User.findOne({
+    where: { username: decodeToken.username },
+  });
 
-
-  //return { username: decodeToken.username, role: decodeToken.roles };
   return user;
 };
