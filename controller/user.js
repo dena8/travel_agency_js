@@ -85,7 +85,7 @@ module.exports = {
 
       res.setHeader("Authorization", token);
       res.set("Authorization", token);
-
+     // console.log('Bearer ',token);
       res.send({ username, Authorization: token });
     },
   },

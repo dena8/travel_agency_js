@@ -8,7 +8,6 @@ module.exports = {
       const tours = await Tour.findAll({
         include: [{ model: Category, as: "category" }],
       });      
-      throw new Error('MY ERROR')
       res.send(tours);
     },
     async tourById(req, res) {

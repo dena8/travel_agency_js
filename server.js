@@ -21,8 +21,9 @@ app.get("/", (req, res) => {
 app.use(function (err, req, res, next) {
   console.error(err.stack);
 
-  if (err instanceof customError || err instanceof invalidCredentials) {
-    res.status(500).send({ message: err.message });
+  if (err instanceof customError || err instanceof invalidCredentials) { 
+    console.log("FROM GLOBAL");
+    res.status(err.status).send({ message: err.message });
     return;
   }
 
