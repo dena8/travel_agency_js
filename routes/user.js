@@ -4,7 +4,7 @@ const asyncHandler = require('express-async-handler');
 const {isAuth,hasRole} = require('../middleware/index');
 
 
-router.get('/get/current',hasRole('USER_ROLE'),asyncHandler(userController.get.currentUser));
+router.get('/get/current',[hasRole('USER_ROLE')],asyncHandler(userController.get.currentUser));
 router.get('/authorities',[hasRole('ADMIN_ROLE'||'USER_ROLE')],asyncHandler(userController.get.authorities));
 router.get('/find',asyncHandler(userController.get.checkIfUserExist));
 

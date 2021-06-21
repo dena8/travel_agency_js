@@ -35,9 +35,22 @@ User.comparePassword = function(password,user){
   return bcrypt.compare(password, user.password);
 }
 
-Tour.belongsTo(User,{
+Tour.belongsTo(User,{  
   foreignKey: 'creatorId',
   as: 'creator' 
 });
+
+Tour.belongsToMany(User,{
+  through:'users_cart',
+  as:'users',
+  foreignKey:'cart_toursId'
+});
+
+User.belongsToMany(Tour,{
+  through:'users_cart',
+  as:'cart',
+  foreignKey:'cart_usersId'
+})
+
  
 module.exports = User;

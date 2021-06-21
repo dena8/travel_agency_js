@@ -1,13 +1,14 @@
 const { User, Authority } = require("../model/index");
 const jwt = require("jsonwebtoken");
-const currentUser = require("../util/currentUser");
+const getCurrentUser = require("../util/currentUser");
 const credentialsError = require("../error/invalid_user_or_password");
 const applicationError = require("../error/custom_error");
 
 module.exports = {
   get: {
     async currentUser(req, res) {
-      const user = currentUser(req);
+      const user =await getCurrentUser(req);     
+      console.log(user);     
       res.send(user);
     },
     async authorities(req, res) {
@@ -85,7 +86,7 @@ module.exports = {
 
       res.setHeader("Authorization", token);
       res.set("Authorization", token);
-     // console.log('Bearer ',token);
+      console.log('Bearer ',token);
       res.send({ username, Authorization: token });
     },
   },

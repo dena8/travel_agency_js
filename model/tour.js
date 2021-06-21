@@ -14,7 +14,7 @@ Tour.init(
     participants: { type: DataTypes.INTEGER, allowNull: false },
     difficultyLevel: { type: DataTypes.STRING, allowNull: false },
     image: { type: DataTypes.STRING, allowNull: false },
-    price: { type: DataTypes.DECIMAL, allowNull: false },
+    price: { type: DataTypes.DOUBLE, allowNull: false },
     enabled: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue:true},
     startDate:{type:DataTypes.DATE, allowNull:false}
   },
