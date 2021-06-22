@@ -1,6 +1,5 @@
 const sequelize = require("../config/sequelize");
 const { Model, DataTypes, Sequelize } = require("sequelize");
-const{User} = require('./index');
 const Category = require('./category');
 
 class Tour extends Model {}
