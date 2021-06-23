@@ -4,7 +4,14 @@ const getCurrentUser = require("../util/currentUser");
 
 module.exports = {
   get: {
-    async checkIfTourIsAdded(req, res) {},
+    async checkIfTourIsAdded(req, res) {
+      const id = req.params.id;
+      const user = getCurrentUser(req);
+      const hasTour = await Order.findOne({
+        include: { model: Tour, as: "buyingProducts", where: { id } },
+      });
+      res.send(hasTour != null);
+    },
   },
   post: {
     async addTourToCart(req, res, next) {

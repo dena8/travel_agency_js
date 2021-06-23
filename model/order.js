@@ -1,7 +1,7 @@
 const sequelize = require("../config/sequelize");
 const { Model, DataTypes, Sequelize } = require("sequelize");
 const Tour = require("./tour");
-const User = require('./user');
+const User = require("./user");
 
 class Order extends Model {}
 
@@ -16,11 +16,10 @@ Order.init(
       type: DataTypes.DATE,
       allowNull: false,
     },
-    isConfirm:{
-        type:DataTypes.BOOLEAN,
-        defaultValue:false
-    }
-
+    isConfirm: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   {
     sequelize,
@@ -29,20 +28,20 @@ Order.init(
 );
 
 Order.belongsToMany(Tour, {
-  foreignKey: "buying_products_id",
+  foreignKey: "order_id",
   as: "buyingProducts",
   through: "orders_buying_products",
 });
 
 Tour.belongsToMany(Order, {
-  foreignKey: "order_id",
+  foreignKey: "buying_products_id",
   as: "order",
   through: "orders_buying_products",
 });
 
-Order.belongsTo(User,{
-    foreignKey:'customer_id',
-    as:'customer'
-})
+Order.belongsTo(User, {
+  foreignKey: "customer_id",
+  as: "customer",
+});
 
 module.exports = Order;
