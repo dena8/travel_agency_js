@@ -11,7 +11,7 @@ Category.init(
       defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
     },
-    name: { type: DataTypes.STRING, allowNull: false },
+    name: { type: DataTypes.STRING, allowNull: false, validate:{notEmpty: true,len: [4,10]} },
   },
   {
     sequelize,

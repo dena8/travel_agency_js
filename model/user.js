@@ -15,9 +15,9 @@ User.init(
       defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
     },
-    username: { type: DataTypes.STRING, allowNull: false },
-    password: { type: DataTypes.STRING, allowNull: false },
-    email: { type: DataTypes.STRING, allowNull: false },
+    username: { type: DataTypes.STRING, allowNull: false, validate:{notEmpty: true,} },
+    password: { type: DataTypes.STRING, allowNull: false, validate:{notEmpty: true,} },
+    email: { type: DataTypes.STRING, allowNull: false, validate:{isEmail:true} },
   },
   {
     sequelize,

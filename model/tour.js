@@ -7,13 +7,13 @@ class Tour extends Model {}
 Tour.init(
   {
     id: { type: DataTypes.UUID, defaultValue: Sequelize.UUIDV4, primaryKey: true },
-    name: { type: DataTypes.STRING, allowNull: false },
+    name: { type: DataTypes.STRING, allowNull: false, validate:{notEmpty: true,len: [2,30],} },
     description: { type: DataTypes.STRING, allowNull: false },
     region: { type: DataTypes.STRING, allowNull: false },
-    participants: { type: DataTypes.INTEGER, allowNull: false },
+    participants: { type: DataTypes.INTEGER, allowNull: false, validate:{ isInt: true, min:0 }},
     difficultyLevel: { type: DataTypes.STRING, allowNull: false },
     image: { type: DataTypes.STRING, allowNull: false },
-    price: { type: DataTypes.DOUBLE, allowNull: false },
+    price: { type: DataTypes.DOUBLE, allowNull: false, validate:{isFloat:true,min:0} },
     enabled: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue:true},
     startDate:{type:DataTypes.DATE, allowNull:false}
   },

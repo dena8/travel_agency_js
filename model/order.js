@@ -14,7 +14,7 @@ Order.init(
     },
     buyDate: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: false,      
     },
     isConfirm: {
       type: DataTypes.BOOLEAN,
