@@ -1,20 +1,26 @@
 const cloudinary = require("cloudinary").v2;
-const { Tour, Category,User } = require("../model/index");
+const { Tour, Category, User } = require("../model/index");
 const getCurrentUser = require("../util/currentUser");
 
 module.exports = {
   get: {
     async all(req, res) {
       const tours = await Tour.findAll({
-        include: [{ model: Category, as: "category" },{model:User, as:'creator'}],
-      });      
+        include: [
+          { model: Category, as: "category" },
+          { model: User, as: "creator" },
+        ],
+      });
       res.send(tours);
     },
     async tourById(req, res) {
-      const id = req.params.id;     
+      const id = req.params.id;
       const tour = await Tour.findOne({
         where: { id },
-        include: [{ model: Category, as: "category" }],
+        include: [
+          { model: Category, as: "category" },
+          { model: User, as: "creator" },
+        ],
       });
       res.send(tour);
     },
@@ -66,6 +72,56 @@ module.exports = {
       const id = req.params.id;
       const del = await Tour.destroy({ where: { id } });
       res.send({ massage: "deleted" });
+    },
+  },
+  update: {
+    async updateTour(req, res) {
+      const {
+        category,
+        description,
+        difficultyLevel,
+        image,
+        name,
+        participants,
+        price,
+        region,
+        startDate,
+      } = req.body;
+
+      if (typeof image === "string") {
+        await Tour.update(
+          {
+            category,
+            description,
+            difficultyLevel,
+            image,
+          },
+          { where: { id: req.params.id } }
+        );
+      }
+      //  disabled cloudinary while testing
+      //  const imageFile = req.files;
+      //  const tourImage = await cloudinary.uploader.upload(imageFile.image.path);
+      const tourImage = {};
+      tourImage.url =
+        "https://www.voubs.bg/original/photo/270/Beautiful+nature_1d45a6ee858ebe41a190c539a8835234.jpg";
+
+      await Tour.update(
+        {
+          category,
+          description,
+          difficultyLevel,
+          image: tourImage.url,
+          name,
+          participants,
+          price,
+          region,
+          startDate,
+        },
+        { where: { id: req.params.id } }
+      );
+
+      res.send({ message: "updated" });
     },
   },
 };

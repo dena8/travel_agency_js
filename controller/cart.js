@@ -5,12 +5,17 @@ const getCurrentUser = require("../util/currentUser");
 module.exports = {
   get: {
     async checkIfTourIsAdded(req, res) {
-      const id = req.params.id;
-      const user = getCurrentUser(req);
-      const hasTour = await Order.findOne({
+      const id = req.params.id;     
+      const hasTourInOrders = await Order.findOne({
         include: { model: Tour, as: "buyingProducts", where: { id } },
-      });
-      res.send(hasTour != null);
+      }); 
+      if(hasTourInOrders){
+        res.send(true);
+      }
+      const hasTourInCart = await User.findOne({
+        include:{model:Tour, as:'cart', where:{id}}
+      })     
+      res.send(hasTourInCart != null);      
     },
   },
   post: {
@@ -21,6 +26,7 @@ module.exports = {
       }
       const user = await getCurrentUser(req);
       await user.addCart(tour);
+      await Tour.update({participants:tour.participants-1},{where:{id: req.params.id}});
       res.send(user);
     },
     async createOrder(req, res) {
@@ -46,9 +52,8 @@ module.exports = {
       const tourId = req.query.tourId;
       const user = await getCurrentUser(req);
       const tour = await Tour.findOne({ where: { id: tourId } });
-
       await user.removeCart(tour);
-
+      await Tour.update({participants:tour.participants+1},{where:{id: tourId}});
       res.send(user);
     },
   },

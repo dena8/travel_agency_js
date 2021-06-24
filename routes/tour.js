@@ -13,5 +13,7 @@ router.post('/create',hasRole('GUIDE_ROLE'),multipartMiddleware,asyncHandler(tou
 
 router.delete('/remove/:id',hasRole('ADMIN_ROLE'),asyncHandler(tourController.delete.tourById));
 
+router.put('/update/:id',hasRole('GUIDE_ROLE'),multipartMiddleware,asyncHandler(tourController.update.updateTour));
+
 
 module.exports=router;
