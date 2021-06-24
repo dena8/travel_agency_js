@@ -3,12 +3,13 @@ const jwt = require("jsonwebtoken");
 const getCurrentUser = require("../util/currentUser");
 const credentialsError = require("../error/invalid_user_or_password");
 const applicationError = require("../error/custom_error");
+const initAuthorities = require("../util/initialAuthoritiesSetup");
 
 module.exports = {
   get: {
     async currentUser(req, res) {
-      const user =await getCurrentUser(req);     
-      console.log(user);     
+      const user = await getCurrentUser(req);
+      console.log(user);
       res.send(user);
     },
     async authorities(req, res) {
@@ -29,24 +30,14 @@ module.exports = {
   post: {
     async register(req, res, next) {
       const { username, password, email } = req.body;
-      
-      const findByUsername = await User.findOne({where:{username}});
-      if(findByUsername!=null){
-        throw new applicationError("Username is already in use",500);
-      }  
 
-      if ((await User.count()) == 1) {
-        const guideAuthority = await Authority.findOne({
-          where: { Authority: "GUIDE_ROLE" },
-        });
-        await User.create({
-          username,
-          password,
-          email,
-          authorityId: guideAuthority.id,
-        });
-        res.send({ massage: "created" });
-        return;
+      const findByUsername = await User.findOne({ where: { username } });
+      if (findByUsername != null) {
+        throw new applicationError("Username is already in use", 500);
+      }
+
+      if (await ((await Authority.count()) == 0)) {
+        initAuthorities();
       }
 
       const authority =
@@ -66,7 +57,7 @@ module.exports = {
     async login(req, res, next) {
       const { username, password } = req.body;
       const user = await User.findOne({ where: { username } });
-    
+
       if (user == null) {
         throw new credentialsError("Invalid credentials", 500);
       }
@@ -86,7 +77,7 @@ module.exports = {
 
       res.setHeader("Authorization", token);
       res.set("Authorization", token);
-      console.log('Bearer ',token);
+      console.log("Bearer ", token);
       res.send({ username, Authorization: token });
     },
   },

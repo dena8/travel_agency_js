@@ -1,5 +1,5 @@
 const sequelize = require("../config/sequelize");
-const { Model, DataTypes, Sequelize, QueryTypes } = require("sequelize");
+const { Model, DataTypes, Sequelize} = require("sequelize");
 const User = require("./user");
 
 class Authority extends Model {}
@@ -11,19 +11,17 @@ Authority.init(
       defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
     },
-    authority: { type: DataTypes.STRING, allowNull: false }  
-  }, 
+    authority: { type: DataTypes.STRING, allowNull: false },
+  },
   {
     sequelize,
     modelName: "Authority",
   }
 );
 
-
-User.belongsTo(Authority,{
-  foreignKey:'authorityId',
-  as:'authority'
-})
-
+User.belongsTo(Authority, {
+  foreignKey: "authorityId",
+  as: "authority",
+});
 
 module.exports = Authority;
