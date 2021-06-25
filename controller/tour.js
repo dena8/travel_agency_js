@@ -1,11 +1,13 @@
 const cloudinary = require("cloudinary").v2;
 const { Tour, Category, User } = require("../model/index");
 const getCurrentUser = require("../util/currentUser");
+const { Op, DATE } = require("sequelize");
 
 module.exports = {
   get: {
     async all(req, res) {
       const tours = await Tour.findAll({
+        where: { enabled: true },
         include: [
           { model: Category, as: "category" },
           { model: User, as: "creator" },
@@ -35,7 +37,9 @@ module.exports = {
         participants,
         difficultyLevel,
         price,
+        startDate,
       } = req.body;
+      console.log(startDate);
 
       const imageFile = req.files;
       const categoryId = await Category.findOne({
@@ -59,10 +63,12 @@ module.exports = {
         difficultyLevel,
         price,
         image: tourImage.url,
-        startDate: Date.now(),
+        startDate,
         categoryId: categoryId.dataValues.id,
         creatorId: currentUserId,
       });
+
+      console.log(tour);
 
       res.send({ tour });
     },
@@ -122,6 +128,12 @@ module.exports = {
       );
 
       res.send({ message: "updated" });
+    },
+    async removeFromPortfolio(req, res) {
+      const id = req.params.id;
+      console.log(req.params.id);
+      const del = await Tour.update({ enabled: false }, { where: { id } });
+      res.send({ massage: "removed" });
     },
   },
 };

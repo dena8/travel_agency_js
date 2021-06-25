@@ -6,6 +6,10 @@ const cors = require("cors");
 const customError = require("./error/custom_error");
 const invalidCredentials = require("./error/invalid_user_or_password");
 
+
+
+
+
 const db = require("./config/sequelize");
 //db.sync({ force: true });
 db.sync();
@@ -13,10 +17,20 @@ db.sync();
 require("./config/express")(app);
 require("./config/routes")(app);
 require("./config/cloudinary");
+require('./scheduling/shcedule')
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to application." });
 });
+
+
+
+// cron.schedule("*/10 * * * * *", () => {
+
+//   console.log('running a task every 10 seconds: ', new Date().toLocaleTimeString().replace("/.*(\d{2}:\d{2}:\d{2}).*/", "$1"));
+// });
+
+
 
 app.use(function (err, req, res, next) {
   console.error(err.stack);
