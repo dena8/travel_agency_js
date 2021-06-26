@@ -101,6 +101,11 @@ module.exports = {
             description,
             difficultyLevel,
             image,
+            name,
+            participants,
+            price,
+            region,
+            startDate,
           },
           { where: { id: req.params.id } }
         );
