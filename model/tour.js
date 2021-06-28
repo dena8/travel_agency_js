@@ -1,6 +1,7 @@
 const sequelize = require("../config/sequelize");
 const { Model, DataTypes, Sequelize } = require("sequelize");
 const Category = require('./category');
+const moment = require('moment');
 
 class Tour extends Model {}
 
@@ -15,7 +16,9 @@ Tour.init(
     image: { type: DataTypes.STRING, allowNull: false },
     price: { type: DataTypes.DOUBLE, allowNull: false, validate:{isFloat:true,min:0} },
     enabled: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue:true},
-    startDate:{type:DataTypes.DATE, allowNull:false}
+    startDate:{type:DataTypes.DATE, allowNull:false,get() {
+      return moment(this.getDataValue('startDate')).format('DD/MM/YYYY');
+  }}
   },
   {
     sequelize,

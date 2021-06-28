@@ -8,8 +8,7 @@ const initAuthorities = require("../util/initialAuthoritiesSetup");
 module.exports = {
   get: {
     async currentUser(req, res) {
-      const user = await getCurrentUser(req);
-      console.log(user);
+      const user = await getCurrentUser(req);     
       res.send(user);
     },
     async authorities(req, res) {
@@ -57,6 +56,7 @@ module.exports = {
     async login(req, res, next) {
       const { username, password } = req.body;
       const user = await User.findOne({ where: { username } });
+      console.log(user);
 
       if (user == null) {
         throw new credentialsError("Invalid credentials", 500);
@@ -74,11 +74,12 @@ module.exports = {
         { username, roles: authority },
         process.env.TOKEN_SECRET
       );
-
-      res.setHeader("Authorization", token);
+      
       res.set("Authorization", token);
-      console.log("Bearer ", token);
-      res.send({ username, Authorization: token });
+      res.set('Access-Control-Expose-Headers',"Authorization")
+
+     // console.log("Bearer ", token);
+      res.send({ username});
     },
   },
   update: {

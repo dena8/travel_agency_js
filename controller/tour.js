@@ -1,11 +1,10 @@
 const cloudinary = require("cloudinary").v2;
 const { Tour, Category, User } = require("../model/index");
 const getCurrentUser = require("../util/currentUser");
-const { Op, DATE } = require("sequelize");
 
 module.exports = {
   get: {
-    async all(req, res) {
+    async all(req, res) {   
       const tours = await Tour.findAll({
         where: { enabled: true },
         include: [

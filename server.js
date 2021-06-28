@@ -2,13 +2,9 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const port = process.env.PORT;
-const cors = require("cors");
 const customError = require("./error/custom_error");
 const invalidCredentials = require("./error/invalid_user_or_password");
-
-
-
-
+var path = require('path')
 
 const db = require("./config/sequelize");
 //db.sync({ force: true });
@@ -18,18 +14,12 @@ require("./config/express")(app);
 require("./config/routes")(app);
 require("./config/cloudinary");
 require('./scheduling/shcedule')
+require('./scheduling/clearLogs')
+
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to application." });
 });
-
-
-
-// cron.schedule("*/10 * * * * *", () => {
-
-//   console.log('running a task every 10 seconds: ', new Date().toLocaleTimeString().replace("/.*(\d{2}:\d{2}:\d{2}).*/", "$1"));
-// });
-
 
 
 app.use(function (err, req, res, next) {
