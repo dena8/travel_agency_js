@@ -1,6 +1,5 @@
 node_modules
 .env
-docker-compose.yml
 db.env
 app.log
 eror.log
