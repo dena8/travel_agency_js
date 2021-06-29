@@ -5,16 +5,17 @@ const port = process.env.PORT;
 const customError = require("./error/custom_error");
 const invalidCredentials = require("./error/invalid_user_or_password");
 var path = require('path')
-
-const db = require("./config/sequelize");
-//db.sync({ force: true });
-db.sync();
+require('./config/mysql')
 
 require("./config/express")(app);
 require("./config/routes")(app);
 require("./config/cloudinary");
 require('./scheduling/shcedule')
 require('./scheduling/clearLogs')
+
+const db = require("./config/sequelize");
+//db.sync({ force: true });
+db.sync();
 
 
 app.get("/", (req, res) => {

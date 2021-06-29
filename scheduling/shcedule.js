@@ -15,7 +15,7 @@ module.exports= cron.schedule(" 30 10 * * *", async () => {
     },
     {
       where: {
-        startDate: moment().add(1, 'days').toDate(),
+        startDate: moment().add(2, 'days').toDate(),
         enabled: true,
         participants: {
           [Op.gt]: 0,

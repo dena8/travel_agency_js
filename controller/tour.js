@@ -4,7 +4,7 @@ const getCurrentUser = require("../util/currentUser");
 
 module.exports = {
   get: {
-    async all(req, res) {   
+    async all(req, res) { 
       const tours = await Tour.findAll({
         where: { enabled: true },
         include: [
