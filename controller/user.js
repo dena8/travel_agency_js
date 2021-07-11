@@ -32,7 +32,7 @@ module.exports = {
 
       const findByUsername = await User.findOne({ where: { username } });
       if (findByUsername != null) {
-        throw new applicationError("Username is already in use", 500);
+        throw new applicationError("Username is already in use.Try again!", 500);
       }
 
       if (await ((await Authority.count()) == 0)) {

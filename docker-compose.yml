@@ -18,8 +18,9 @@ services:
       - errlogs:/logs/err.log
       - ./:/app
       - /app/node_modules
+    restart: on-failure  
     depends_on:
-      - mySql
+      - mySql                              
 volumes:
     data:
     applogs:

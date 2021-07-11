@@ -1,18 +1,25 @@
 const cloudinary = require("cloudinary").v2;
 const { Tour, Category, User } = require("../model/index");
 const getCurrentUser = require("../util/currentUser");
+const logger = require("../config/logger");
 
 module.exports = {
   get: {
-    async all(req, res) { 
-      const tours = await Tour.findAll({
+    async all(req, res) {
+      const offset = Number(req.query.page); 
+      
+      const count = offset ? false : await Tour.findAndCountAll({ where: { enabled: true } });
+
+      const tours = await Tour.findAndCountAll({
         where: { enabled: true },
         include: [
           { model: Category, as: "category" },
           { model: User, as: "creator" },
         ],
+        limit: 9 || count.count,
+        offset: (offset-1) * 9,
       });
-      res.send(tours);
+      res.send(tours.rows);
     },
     async tourById(req, res) {
       const id = req.params.id;

@@ -4,8 +4,13 @@ const app = express();
 const port = process.env.PORT;
 const customError = require("./error/custom_error");
 const invalidCredentials = require("./error/invalid_user_or_password");
+const Sentry = require('@sentry/node');
 var path = require('path')
 require('./config/mysql')
+
+Sentry.init({ dsn: process.env.SENTRY_DNS});
+app.use(Sentry.Handlers.requestHandler());
+
 
 require("./config/express")(app);
 require("./config/routes")(app);
@@ -13,15 +18,13 @@ require("./config/cloudinary");
 require('./scheduling/shcedule')
 require('./scheduling/clearLogs')
 
-const db = require("./config/sequelize");
-//db.sync({ force: true });
-db.sync();
 
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to application." });
 });
 
+app.use(Sentry.Handlers.errorHandler());
 
 app.use(function (err, req, res, next) {
   console.error(err.stack);
@@ -31,8 +34,8 @@ app.use(function (err, req, res, next) {
     res.status(err.status).send({ message: err.message });
     return;
   }
-
-  res.status(500).send({ message: "Something went wrong. Please try again." });
+  console.log(err);
+  res.status(500).send({ message: "Something went wrong. Please try again.",err });
 });
 
 app.listen(port, (err) => {
